@@ -1,5 +1,3 @@
-version: "3"
-
 services:
 
     onedev-server-backup:
@@ -18,6 +16,8 @@ services:
         volumes:
             - onedev-server:/opt/onedev
             - onedev-backup:/root/backup
+        profiles:
+            - backup
         networks:
             - onedev
 
@@ -35,6 +35,8 @@ services:
         volumes:
             - onedev-server:/opt/onedev
             - onedev-backup:/root/backup
+        profiles:
+            - restore
         networks:
             - onedev
 
@@ -51,6 +53,8 @@ services:
         volumes:
             - onedev-server:/opt/onedev
             - onedev-backup:/root/backup
+        profiles:
+            - backup
         depends_on:
             - onedev-server
             - onedev-database
@@ -68,6 +72,8 @@ services:
         volumes:
             - onedev-server:/opt/onedev
             - onedev-backup:/root/backup
+        profiles:
+            - restore
         depends_on:
             - onedev-database
         networks:

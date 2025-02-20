@@ -1,6 +1,5 @@
-version: "3"
-
 services:
+
     onedev-server:
         build:
             context: .
@@ -14,6 +13,7 @@ services:
             - POSTGRES_PASSWORD=onedev
         volumes:
             - onedev-server:/opt/onedev
+            - onedev-backup:/root/backup
         ports:
             - 6610:6610
         depends_on:
@@ -34,17 +34,22 @@ services:
         networks:
             - onedev
 
-    # onedev-agent:
-    #     image: 1dev/agent:latest
-    #     container_name: website-onedev-agent
-    #     restart: unless-stopped
-    #     volumes:
-    #         - /var/run/docker.sock:/var/run/docker.sock
-    #     environment:
-    #         - serverUrl=$ONEDEV_AGENT_SERVER_URL
-    #         - agentToken=$ONEDEV_AGENT_TOKEN
-    #     networks:
-    #         - onedev
+    onedev-agent:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-agent
+        image: onedev-agent:latest
+        container_name: idms-onedev-agent
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - serverUrl=http://onedev-server:6610
+            - agentToken=a8c5f208-882b-4a9f-b96a-262d8e569530
+        profiles:
+            - agent
+        networks:
+            - onedev
 
 networks:
     onedev:
@@ -56,3 +61,6 @@ volumes:
 
     onedev-database:
         name: idms-onedev-database
+
+    onedev-backup:
+        name: idms-onedev-backup
