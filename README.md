@@ -1,2 +1,1 @@
-# idms-onedev
-Individual Development Management Studio
+# Individual Development Management Studio for OneDev

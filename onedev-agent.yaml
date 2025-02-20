@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+
+    onedev-agent:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-agent
+        image: onedev-agent:latest
+        container_name: idms-onedev-agent
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        hostname: default-agent
+        environment:
+            - serverUrl=
+            - agentToken=
+        networks:
+            - onedev
+
+networks:
+    onedev:
+        name: idms-onedev

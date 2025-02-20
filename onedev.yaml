@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+    onedev-server:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-server
+        image: onedev-server:latest
+        container_name: idms-onedev-server
+        restart: unless-stopped
+        environment:
+            - POSTGRES_DB=onedev
+            - POSTGRES_USER=onedev
+            - POSTGRES_PASSWORD=onedev
+        volumes:
+            - onedev-server:/opt/onedev
+        ports:
+            - 6610:6610
+        depends_on:
+            - onedev-database
+        networks:
+            - onedev
+
+    onedev-database:
+        image: postgres:17.3-alpine
+        container_name: idms-onedev-database
+        restart: unless-stopped
+        environment:
+            - POSTGRES_DB=onedev
+            - POSTGRES_USER=onedev
+            - POSTGRES_PASSWORD=onedev
+        volumes:
+            - onedev-database:/var/lib/postgresql/data
+        networks:
+            - onedev
+
+    # onedev-agent:
+    #     image: 1dev/agent:latest
+    #     container_name: website-onedev-agent
+    #     restart: unless-stopped
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #     environment:
+    #         - serverUrl=$ONEDEV_AGENT_SERVER_URL
+    #         - agentToken=$ONEDEV_AGENT_TOKEN
+    #     networks:
+    #         - onedev
+
+networks:
+    onedev:
+        name: idms-onedev
+
+volumes:
+    onedev-server:
+        name: idms-onedev-server
+
+    onedev-database:
+        name: idms-onedev-database

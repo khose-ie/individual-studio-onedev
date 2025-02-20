@@ -1,0 +1,85 @@
+version: "3"
+
+services:
+
+    onedev-server-backup:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-server
+        image: onedev-server:latest
+        container_name: idms-onedev-server-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/onedev-server-backup.tar.gz
+            - -C/opt/onedev/
+            - conf
+            - site
+        volumes:
+            - onedev-server:/opt/onedev
+            - onedev-backup:/root/backup
+        networks:
+            - onedev
+
+    onedev-server-restore:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-server
+        image: onedev-server:latest
+        container_name: idms-onedev-server-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/onedev-server-backup.tar.gz
+            - -C/opt/onedev/
+        volumes:
+            - onedev-server:/opt/onedev
+            - onedev-backup:/root/backup
+        networks:
+            - onedev
+
+    onedev-database-backup:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-server
+        image: onedev-server:latest
+        container_name: idms-onedev-database-backup
+        entrypoint: /opt/onedev/bin/backup-db.sh
+        command: /root/backup/onedev-database-backup.zip
+        links:
+            - onedev-server
+        volumes:
+            - onedev-server:/opt/onedev
+            - onedev-backup:/root/backup
+        depends_on:
+            - onedev-server
+            - onedev-database
+        networks:
+            - onedev
+
+    onedev-database-restore:
+        build:
+            context: .
+            dockerfile: dockerfile.onedev-server
+        image: onedev-server:latest
+        container_name: idms-onedev-database-restore
+        entrypoint: /opt/onedev/bin/restore-db.sh
+        command: /root/backup/onedev-database-backup.zip
+        volumes:
+            - onedev-server:/opt/onedev
+            - onedev-backup:/root/backup
+        depends_on:
+            - onedev-database
+        networks:
+            - onedev
+
+networks:
+    onedev:
+        name: idms-onedev
+
+volumes:
+    onedev-server:
+        name: idms-onedev-server
+
+    onedev-backup:
+        name: idms-onedev-backup
