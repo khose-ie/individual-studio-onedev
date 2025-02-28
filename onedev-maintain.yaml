@@ -5,7 +5,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-server
         image: onedev-server:latest
-        container_name: idms-onedev-server-backup
+        container_name: individual-studio-onedev-server-backup
         entrypoint: tar
         command:
             - -zcf
@@ -26,7 +26,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-server
         image: onedev-server:latest
-        container_name: idms-onedev-server-restore
+        container_name: individual-studio-onedev-server-restore
         entrypoint: tar
         command:
             - -zxf
@@ -45,7 +45,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-server
         image: onedev-server:latest
-        container_name: idms-onedev-database-backup
+        container_name: individual-studio-onedev-database-backup
         entrypoint: /opt/onedev/bin/backup-db.sh
         command: /root/backup/onedev-database-backup.zip
         links:
@@ -66,7 +66,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-server
         image: onedev-server:latest
-        container_name: idms-onedev-database-restore
+        container_name: individual-studio-onedev-database-restore
         entrypoint: /opt/onedev/bin/restore-db.sh
         command: /root/backup/onedev-database-backup.zip
         volumes:
@@ -81,11 +81,11 @@ services:
 
 networks:
     onedev:
-        name: idms-onedev
+        name: individual-studio-onedev
 
 volumes:
     onedev-server:
-        name: idms-onedev-server
+        name: individual-studio-onedev-server
 
     onedev-backup:
-        name: idms-onedev-backup
+        name: individual-studio-onedev-backup

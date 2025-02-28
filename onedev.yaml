@@ -5,7 +5,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-server
         image: onedev-server:latest
-        container_name: idms-onedev-server
+        container_name: individual-studio-onedev-server
         restart: unless-stopped
         environment:
             - POSTGRES_DB=onedev
@@ -23,7 +23,7 @@ services:
 
     onedev-database:
         image: postgres:17.3-alpine
-        container_name: idms-onedev-database
+        container_name: individual-studio-onedev-database
         restart: unless-stopped
         environment:
             - POSTGRES_DB=onedev
@@ -39,7 +39,7 @@ services:
             context: .
             dockerfile: dockerfile.onedev-agent
         image: onedev-agent:latest
-        container_name: idms-onedev-agent
+        container_name: individual-studio-onedev-agent
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
@@ -53,14 +53,14 @@ services:
 
 networks:
     onedev:
-        name: idms-onedev
+        name: individual-studio-onedev
 
 volumes:
     onedev-server:
-        name: idms-onedev-server
+        name: individual-studio-onedev-server
 
     onedev-database:
-        name: idms-onedev-database
+        name: individual-studio-onedev-database
 
     onedev-backup:
-        name: idms-onedev-backup
+        name: individual-studio-onedev-backup

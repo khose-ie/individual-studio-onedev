@@ -4,7 +4,7 @@ jobs:
   steps:
   - !PushRepository
     name: Push to Remote
-    remoteUrl: https://github.com/khose-ie/idms-onedev.git
+    remoteUrl: https://github.com/khose-ie/individual-studio-onedev.git
     userName: khose-ie
     passwordSecret: GITHUB_TOKEN
     force: false
